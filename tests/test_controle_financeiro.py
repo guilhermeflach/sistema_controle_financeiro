@@ -46,9 +46,68 @@ class ControleFinanceiroTestCase(unittest.TestCase):
         controle.registrar_despesa("Alimentação", 50, "08/08/2026")
         controle.registrar_despesa("Transporte", 30, "10/09/2026")
 
+        relatorio = controle.relatorio_mensal(9, 2026)
+
+        self.assertEqual(relatorio["gasto_total_geral"], 130)
         self.assertEqual(
-            controle.relatorio_mensal(9, 2026),
+            relatorio["gasto_por_categoria"],
             {"Alimentação": 100, "Transporte": 30},
+        )
+        self.assertAlmostEqual(relatorio["percentual_por_categoria"]["Alimentação"], 100 * 100 / 130)
+        self.assertEqual(relatorio["variacao_total_absoluta"], 80)
+
+    def test_relatorio_calcula_variacoes_e_ignora_categoria_nova(self):
+        controle = ControleFinanceiro()
+        controle.criar_categoria("Alimentação")
+        controle.criar_categoria("Transporte")
+        controle.registrar_despesa("Alimentação", 100, "05/08/2026")
+        controle.registrar_despesa("Transporte", 50, "05/08/2026")
+        controle.registrar_despesa("Alimentação", 140, "05/09/2026")
+        controle.registrar_despesa("Transporte", 25, "05/09/2026")
+
+        relatorio = controle.relatorio_mensal(9, 2026)
+
+        self.assertEqual(relatorio["variacao_total_absoluta"], 15)
+        self.assertEqual(relatorio["variacao_por_categoria_absoluta"], {"Alimentação": 40, "Transporte": -25})
+        self.assertEqual(relatorio["variacao_por_categoria_percentual"]["Alimentação"], 40)
+        self.assertEqual(controle.categorias_com_aumento_significativo(9, 2026), ["Alimentação"])
+
+    def test_categoria_nova_nao_tem_variacao_calculada(self):
+        controle = ControleFinanceiro()
+        controle.criar_categoria("Alimentação")
+        controle.criar_categoria("Lazer")
+        controle.registrar_despesa("Alimentação", 100, "05/08/2026")
+        controle.registrar_despesa("Alimentação", 100, "05/09/2026")
+        controle.registrar_despesa("Lazer", 70, "05/09/2026")
+
+        relatorio = controle.relatorio_mensal(9, 2026)
+
+        self.assertNotIn("Lazer", relatorio["variacao_por_categoria_absoluta"])
+        self.assertNotIn("Lazer", relatorio["variacao_por_categoria_percentual"])
+
+    def test_primeiro_mes_preenche_comparativos_com_mensagem(self):
+        controle = ControleFinanceiro()
+        controle.criar_categoria("Alimentação")
+        controle.registrar_despesa("Alimentação", 90, "05/09/2026")
+
+        relatorio = controle.relatorio_mensal(9, 2026)
+
+        mensagem = "não há dados do mês anterior"
+        self.assertEqual(relatorio["variacao_total_absoluta"], mensagem)
+        self.assertEqual(relatorio["variacao_total_percentual"], mensagem)
+        self.assertEqual(relatorio["variacao_por_categoria_absoluta"], mensagem)
+        self.assertEqual(relatorio["variacao_por_categoria_percentual"], mensagem)
+
+    def test_alerta_considera_apenas_o_mes_informado(self):
+        controle = ControleFinanceiro()
+        controle.criar_categoria("Energia", limite=100)
+        controle.registrar_despesa("Energia", 150, "05/08/2026")
+        controle.registrar_despesa("Energia", 80, "05/09/2026")
+
+        self.assertEqual(controle.verificar_alertas(9, 2026), [])
+        self.assertEqual(
+            controle.verificar_alertas(8, 2026),
+            ["A categoria 'Energia' ultrapassou o limite mensal."],
         )
 
 

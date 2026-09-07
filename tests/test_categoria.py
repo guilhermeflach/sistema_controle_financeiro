@@ -15,8 +15,8 @@ class CategoriaTestCase(unittest.TestCase):
         categoria.adicionar_despesa(despesa)
 
         self.assertEqual(categoria.despesas, [despesa])
-        self.assertEqual(categoria.total_gasto(), 42.5)
-        self.assertFalse(categoria.ultrapassou_limite())
+        self.assertEqual(categoria.total_no_periodo(9, 2026), 42.5)
+        self.assertFalse(categoria.ultrapassou_limite(9, 2026))
 
     def test_rejeita_despesa_de_categoria_diferente(self):
         categoria = Categoria("Alimentação")
@@ -40,7 +40,8 @@ class CategoriaTestCase(unittest.TestCase):
         categoria.adicionar_despesa(Despesa(60, "Energia", "01/09/2026"))
         categoria.adicionar_despesa(Despesa(45, "Energia", "02/09/2026"))
 
-        self.assertTrue(categoria.ultrapassou_limite())
+        self.assertFalse(categoria.ultrapassou_limite(8, 2026))
+        self.assertTrue(categoria.ultrapassou_limite(9, 2026))
 
 
 if __name__ == "__main__":
