@@ -1,0 +1,16 @@
+- inserir despesas (valor; data; categoria)
+- visualizar gastos (relatórios mensais); exportar relatório para pdf
+- comparar gastos dos meses; identificar categorias com aumento significativo de gastos
+- enviar alertas quando gastos ultrapassarem limite pré - definido
+
+
+classes:
+
+	Despesa: valor; categoria; data; descrição
+	
+	Categoria:  nome; limite (op); lista
+
+	ControleFinanceiro: categorias (dict)
+
+
+
