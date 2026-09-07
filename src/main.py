@@ -58,3 +58,38 @@ class Categoria:
 
     def ultrapassou_limite(self) -> bool:
         return self.limite is not None and self.total_gasto() > self.limite
+
+
+class ControleFinanceiro:
+    def __init__(self) -> None:
+        self.categorias: dict[str, Categoria] = {}
+
+    def criar_categoria(
+        self, nome: str, limite: float | None = None
+    ) -> Categoria:
+        if nome in self.categorias:
+            raise ValueError(f"A categoria '{nome}' já existe.")
+
+        categoria = Categoria(nome, limite)
+        self.categorias[nome] = categoria
+        return categoria
+
+    def registrar_despesa(
+        self,
+        nome_categoria: str,
+        valor: float,
+        data: str,
+        descricao: str = "",
+    ) -> Despesa:
+        if nome_categoria not in self.categorias:
+            raise KeyError(f"A categoria '{nome_categoria}' não existe.")
+
+        despesa = Despesa(valor, nome_categoria, data, descricao)
+        self.categorias[nome_categoria].adicionar_despesa(despesa)
+        return despesa
+
+    def relatorio_mensal(self, mes: int, ano: int) -> dict[str, float]:
+        return {
+            nome: categoria.total_no_periodo(mes, ano)
+            for nome, categoria in self.categorias.items()
+        }
