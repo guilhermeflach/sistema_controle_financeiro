@@ -218,10 +218,14 @@ class InterfaceGUI:
         ttk.Label(frame, text="Mês (1-12):").pack(anchor=tk.W)
         self.rel_mes = ttk.Entry(frame, width=30)
         self.rel_mes.pack(anchor=tk.W, pady=5)
+        # Autopreenchimento com mês atual
+        self.rel_mes.insert(0, str(datetime.today().month))
 
         ttk.Label(frame, text="Ano:").pack(anchor=tk.W, pady=(10, 0))
         self.rel_ano = ttk.Entry(frame, width=30)
         self.rel_ano.pack(anchor=tk.W, pady=5)
+        # Autopreenchimento com ano atual
+        self.rel_ano.insert(0, str(datetime.today().year))
 
         def gerar():
             valido, (mes, ano) = _validar_mes_ano(self.rel_mes.get(), self.rel_ano.get())
@@ -263,10 +267,14 @@ class InterfaceGUI:
         ttk.Label(frame, text="Mês (1-12):").pack(anchor=tk.W)
         self.ale_mes = ttk.Entry(frame, width=30)
         self.ale_mes.pack(anchor=tk.W, pady=5)
+        # Autopreenchimento com mês atual
+        self.ale_mes.insert(0, str(datetime.today().month))
 
         ttk.Label(frame, text="Ano:").pack(anchor=tk.W, pady=(10, 0))
         self.ale_ano = ttk.Entry(frame, width=30)
         self.ale_ano.pack(anchor=tk.W, pady=5)
+        # Autopreenchimento com ano atual
+        self.ale_ano.insert(0, str(datetime.today().year))
 
         def verificar():
             valido, (mes, ano) = _validar_mes_ano(self.ale_mes.get(), self.ale_ano.get())
@@ -308,10 +316,14 @@ class InterfaceGUI:
         ttk.Label(frame, text="Mês (1-12):").pack(anchor=tk.W)
         self.comp_mes = ttk.Entry(frame, width=30)
         self.comp_mes.pack(anchor=tk.W, pady=5)
+        # Autopreenchimento com mês atual
+        self.comp_mes.insert(0, str(datetime.today().month))
 
         ttk.Label(frame, text="Ano:").pack(anchor=tk.W, pady=(10, 0))
         self.comp_ano = ttk.Entry(frame, width=30)
         self.comp_ano.pack(anchor=tk.W, pady=5)
+        # Autopreenchimento com ano atual
+        self.comp_ano.insert(0, str(datetime.today().year))
 
         def comparar():
             valido, (mes, ano) = _validar_mes_ano(self.comp_mes.get(), self.comp_ano.get())
@@ -359,10 +371,14 @@ class InterfaceGUI:
         ttk.Label(frame, text="Mês (1-12):").pack(anchor=tk.W)
         self.pdf_mes = ttk.Entry(frame, width=30)
         self.pdf_mes.pack(anchor=tk.W, pady=5)
+        # Autopreenchimento com mês atual
+        self.pdf_mes.insert(0, str(datetime.today().month))
 
         ttk.Label(frame, text="Ano:").pack(anchor=tk.W, pady=(10, 0))
         self.pdf_ano = ttk.Entry(frame, width=30)
         self.pdf_ano.pack(anchor=tk.W, pady=5)
+        # Autopreenchimento com ano atual
+        self.pdf_ano.insert(0, str(datetime.today().year))
 
         def exportar():
             valido, (mes, ano) = _validar_mes_ano(self.pdf_mes.get(), self.pdf_ano.get())
