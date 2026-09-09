@@ -162,3 +162,53 @@ class ControleFinanceiro:
             for nome, categoria in self.categorias.items()
             if categoria.ultrapassou_limite(mes, ano)
         ]
+
+    def salvar_dados(self, caminho_arquivo: str) -> None:
+        import json
+        
+        dados = {
+            "categorias": [
+                {
+                    "nome": categoria.nome,
+                    "limite": categoria.limite,
+                    "despesas": [
+                        {
+                            "valor": despesa.valor,
+                            "categoria": despesa.categoria,
+                            "data": despesa.data_formatada(),
+                            "descricao": despesa.descricao,
+                        }
+                        for despesa in categoria.despesas
+                    ],
+                }
+                for categoria in self.categorias.values()
+            ]
+        }
+        
+        with open(caminho_arquivo, "w", encoding="utf-8") as f:
+            json.dump(dados, f, indent=2, ensure_ascii=False)
+
+    def carregar_dados(self, caminho_arquivo: str) -> None:
+        import json
+        from pathlib import Path
+        
+        if not Path(caminho_arquivo).exists():
+            return
+        
+        with open(caminho_arquivo, "r", encoding="utf-8") as f:
+            dados = json.load(f)
+        
+        self.categorias.clear()
+        
+        for cat_data in dados.get("categorias", []):
+            nome = cat_data["nome"]
+            limite = cat_data.get("limite")
+            self.criar_categoria(nome, limite)
+            
+            for desp_data in cat_data.get("despesas", []):
+                self.registrar_despesa(
+                    nome,
+                    desp_data["valor"],
+                    desp_data["data"],
+                    desp_data.get("descricao", ""),
+                )

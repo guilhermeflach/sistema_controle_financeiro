@@ -1,0 +1,100 @@
+{
+  "categorias": [
+    {
+      "nome": "Alimentação",
+      "limite": 500.0,
+      "despesas": [
+        {
+          "valor": 45.0,
+          "categoria": "Alimentação",
+          "data": "10/08/2026",
+          "descricao": "Créditos RU Trindade"
+        },
+        {
+          "valor": 30.0,
+          "categoria": "Alimentação",
+          "data": "05/09/2026",
+          "descricao": "Créditos RU CCA"
+        }
+      ]
+    },
+    {
+      "nome": "Esportes",
+      "limite": 250.0,
+      "despesas": [
+        {
+          "valor": 119.9,
+          "categoria": "Esportes",
+          "data": "15/08/2026",
+          "descricao": "Mensalidade Selfit"
+        },
+        {
+          "valor": 119.9,
+          "categoria": "Esportes",
+          "data": "10/09/2026",
+          "descricao": "Mensalidade Selfit"
+        },
+        {
+          "valor": 180.0,
+          "categoria": "Esportes",
+          "data": "12/09/2026",
+          "descricao": "Mensalidade Rilion Gracie"
+        }
+      ]
+    },
+    {
+      "nome": "Cuidados Pessoais",
+      "limite": 150.0,
+      "despesas": [
+        {
+          "valor": 55.0,
+          "categoria": "Cuidados Pessoais",
+          "data": "20/08/2026",
+          "descricao": "Corte Rud Barbearia"
+        },
+        {
+          "valor": 55.0,
+          "categoria": "Cuidados Pessoais",
+          "data": "18/09/2026",
+          "descricao": "Corte Rud Barbearia"
+        },
+        {
+          "valor": 150.0,
+          "categoria": "Cuidados Pessoais",
+          "data": "07/09/2026",
+          "descricao": "perfume"
+        }
+      ]
+    },
+    {
+      "nome": "Compras",
+      "limite": 400.0,
+      "despesas": [
+        {
+          "valor": 150.0,
+          "categoria": "Compras",
+          "data": "22/08/2026",
+          "descricao": "Compra Mercado Livre"
+        },
+        {
+          "valor": 80.0,
+          "categoria": "Compras",
+          "data": "20/09/2026",
+          "descricao": "Compra Mercado Livre"
+        }
+      ]
+    },
+    {
+      "nome": "Educação",
+      "limite": 300.0,
+      "despesas": [
+        {
+          "valor": 180.0,
+          "categoria": "Educação",
+          "data": "25/08/2026",
+          "descricao": "Material Odyssée B1"
+        }
+      ]
+    }
+  ]
+}
