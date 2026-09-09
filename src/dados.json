@@ -89,18 +89,6 @@
           "descricao": "Material Odyssée B1"
         }
       ]
-    },
-    {
-      "nome": "Assinaturas",
-      "limite": 300.0,
-      "despesas": [
-        {
-          "valor": 50.0,
-          "categoria": "Assinaturas",
-          "data": "08/09/2026",
-          "descricao": "netflix"
-        }
-      ]
     }
   ]
 }

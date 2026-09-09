@@ -96,7 +96,7 @@ class InterfaceGUI:
         self.notebook.add(self.aba_despesa, text="Despesa")
         self.notebook.add(self.aba_relatorio, text="Relatório")
         self.notebook.add(self.aba_alertas, text="Alertas")
-        self.notebook.add(self.aba_comparacao, text="Comparação")
+        self.notebook.add(self.aba_comparacao, text="Comparativo")
         self.notebook.add(self.aba_pdf, text="Exportar PDF")
 
         self.setup_aba_categoria()
@@ -171,6 +171,8 @@ class InterfaceGUI:
         ttk.Label(frame, text="Data (DD/MM/AAAA):").pack(anchor=tk.W, pady=(10, 0))
         self.desp_data = ttk.Entry(frame, width=30)
         self.desp_data.pack(anchor=tk.W, pady=5)
+        # Autopreenchimento com data atual
+        self.desp_data.insert(0, datetime.today().strftime("%d/%m/%Y"))
 
         ttk.Label(frame, text="Descrição (opcional):").pack(anchor=tk.W, pady=(10, 0))
         self.desp_descricao = ttk.Entry(frame, width=30)
@@ -320,7 +322,7 @@ class InterfaceGUI:
             relatorio = self.controle.relatorio_mensal(mes, ano)
             var_total_abs = relatorio["variacao_total_absoluta"]
             var_total_pct = relatorio["variacao_total_percentual"]
-            var_por_cat_pct = relatorio["variacao_por_categoria_percentual"]
+            var_por_cat_abs = relatorio["variacao_por_categoria_absoluta"]
             
             mes_ant, ano_ant = self.controle._mes_anterior(mes, ano)
             texto = f"=== Comparação: {mes:02d}/{ano} vs {mes_ant:02d}/{ano_ant} ===\n"
@@ -332,10 +334,13 @@ class InterfaceGUI:
                 if isinstance(var_total_pct, (int, float)):
                     texto += f"Variação percentual: {var_total_pct:.2f}%\n"
             
-            if isinstance(var_por_cat_pct, dict) and var_por_cat_pct:
-                texto += "\nVariação por categoria:\n"
-                for nome, pct in var_por_cat_pct.items():
-                    texto += f"  {nome}: {pct:+.2f}%\n"
+            if isinstance(var_por_cat_abs, dict) and var_por_cat_abs:
+                texto += "\nVariação por categoria (R$):\n"
+                for nome, valor in var_por_cat_abs.items():
+                    if isinstance(valor, (int, float)):
+                        texto += f"  {nome}: {valor:+.2f}\n"
+                    else:
+                        texto += f"  {nome}: {valor}\n"
             
             self.comp_texto.config(state=tk.NORMAL)
             self.comp_texto.delete(1.0, tk.END)

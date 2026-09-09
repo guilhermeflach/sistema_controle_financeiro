@@ -100,6 +100,8 @@ def gerar_relatorio_pdf(
         ]
         if not despesas:
             continue
+        # Ordenar despesas por data (mais recente primeiro)
+        despesas = sorted(despesas, key=lambda d: d.data, reverse=True)
         pdf.set_font("Helvetica", "B", 10)
         # Cabeçalho com colunas bem definidas: Data | Valor | Descrição
         # Dimensões ajustadas para caber em A4 com margens
