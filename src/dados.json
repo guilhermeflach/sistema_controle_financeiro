@@ -57,12 +57,6 @@
           "categoria": "Cuidados Pessoais",
           "data": "18/09/2026",
           "descricao": "Corte Rud Barbearia"
-        },
-        {
-          "valor": 150.0,
-          "categoria": "Cuidados Pessoais",
-          "data": "07/09/2026",
-          "descricao": "perfume"
         }
       ]
     },
@@ -93,6 +87,18 @@
           "categoria": "Educação",
           "data": "25/08/2026",
           "descricao": "Material Odyssée B1"
+        }
+      ]
+    },
+    {
+      "nome": "Assinaturas",
+      "limite": 300.0,
+      "despesas": [
+        {
+          "valor": 50.0,
+          "categoria": "Assinaturas",
+          "data": "08/09/2026",
+          "descricao": "netflix"
         }
       ]
     }

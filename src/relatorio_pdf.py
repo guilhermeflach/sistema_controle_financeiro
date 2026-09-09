@@ -55,13 +55,13 @@ def gerar_relatorio_pdf(
     pdf.ln(5)
     pdf.set_font("Helvetica", "B", 13)
     pdf.cell(0, 8, "Alertas", new_x="LMARGIN", new_y="NEXT")
-    pdf.set_font("Helvetica", "B", 10)
+    pdf.set_font("Helvetica", "", 10)  # Remover negrito para multi_cell
     pdf.set_text_color(180, 0, 0)
     if alertas or aumentos:
         for alerta in alertas:
-            pdf.multi_cell(0, 6, f"- {alerta}")
+            pdf.multi_cell(0, 6, f"- {alerta}", new_x="LMARGIN", new_y="NEXT")
         for nome in aumentos:
-            pdf.multi_cell(0, 6, f"- A categoria '{nome}' aumentou mais de 30%.")
+            pdf.multi_cell(0, 6, f"- A categoria '{nome}' aumentou mais de 30%.", new_x="LMARGIN", new_y="NEXT")
     else:
         pdf.set_text_color(0, 0, 0)
         pdf.set_font("Helvetica", "", 10)
@@ -70,19 +70,24 @@ def gerar_relatorio_pdf(
 
     pdf.ln(5)
     pdf.set_font("Helvetica", "B", 10)
-    colunas = [("Categoria", 55), ("Total gasto", 38), ("% do total", 35), ("Variação", 42)]
+    # Tabela com 4 colunas: Categoria, Total gasto, % do total, Variação (absoluta em R$)
+    # Ajustadas para caber em A4 com margens de 15mm
+    colunas = [("Categoria", 65), ("Total gasto", 35), ("% do total", 25), ("Variação (R$)", 30)]
     for titulo, largura in colunas:
         pdf.cell(largura, 8, titulo, border=1, align="C")
     pdf.ln()
     pdf.set_font("Helvetica", "", 9)
-    variacoes_categoria = variacoes if isinstance(variacoes, dict) else {}
     for nome, total in gastos.items():
         if not isinstance(total, (int, float)) or total <= 0:
             continue
-        pdf.cell(55, 7, str(nome), border=1)
-        pdf.cell(38, 7, _formatar_valor(total), border=1, align="R")
-        pdf.cell(35, 7, _formatar_percentual(percentuais.get(nome)), border=1, align="R")
-        pdf.cell(42, 7, _formatar_percentual(variacoes_categoria.get(nome)), border=1, align="R")
+        pdf.cell(65, 7, str(nome)[:18], border=1)  # Trunca nome se muito longo
+        pdf.cell(35, 7, _formatar_valor(total), border=1, align="R")
+        pdf.cell(25, 7, _formatar_percentual(percentuais.get(nome)), border=1, align="R")
+        var_absoluta = relatorio["variacao_por_categoria_absoluta"]
+        if isinstance(var_absoluta, dict):
+            pdf.cell(30, 7, _formatar_valor(var_absoluta.get(nome)), border=1, align="R")
+        else:
+            pdf.cell(30, 7, "N/A", border=1, align="R")
         pdf.ln()
 
     pdf.ln(7)
@@ -96,10 +101,21 @@ def gerar_relatorio_pdf(
         if not despesas:
             continue
         pdf.set_font("Helvetica", "B", 10)
-        pdf.cell(0, 7, str(nome), new_x="LMARGIN", new_y="NEXT")
+        # Cabeçalho com colunas bem definidas: Data | Valor | Descrição
+        # Dimensões ajustadas para caber em A4 com margens
+        pdf.cell(40, 7, "Data", border=1, align="C")
+        pdf.cell(35, 7, "Valor", border=1, align="C")
+        pdf.cell(75, 7, "Descrição", border=1, align="C")
+        pdf.ln()
         pdf.set_font("Helvetica", "", 9)
         for despesa in despesas:
             descricao = despesa.descricao or "Sem descrição"
-            pdf.multi_cell(0, 6, f"{despesa.data_formatada()} | {_formatar_valor(despesa.valor)} | {descricao}")
+            pdf.cell(40, 6, despesa.data_formatada(), border=1)
+            pdf.cell(35, 6, _formatar_valor(despesa.valor), border=1, align="R")
+            # Trunca descrição se necessário para caber
+            desc_truncada = descricao[:35] if len(descricao) > 35 else descricao
+            pdf.cell(75, 6, desc_truncada, border=1)
+            pdf.ln()
+        pdf.ln(3)
 
     pdf.output(str(caminho_saida))
